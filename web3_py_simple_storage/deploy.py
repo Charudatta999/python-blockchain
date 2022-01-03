@@ -1,5 +1,6 @@
 from solcx import compile_standard, install_solc
 import json
+from web3 import web3 
 
 with open("SmipleStorage.sol", "r") as file:
     simple_storage_file = file.read()
@@ -24,3 +25,10 @@ print(compiled_sol)
 
 with open("compiled_code.json","w") as file:
     json.dump(compiled_sol,file)
+#getting bytecode
+bytecode = compiled_sol["contracts"]["SmipleStorage.sol"]["SimpleStorage"]["evm"]["bytecode"]["object"]
+
+#getting ABI
+
+abi=compiled_sol["contracts"]["SmipleStorage.sol"]["SimpleStorage"]["abi"]
+
