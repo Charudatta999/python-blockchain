@@ -43,7 +43,7 @@ private_key = os.getenv("PRIVATE_KEY")
 
 #create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi,bytecode=bytecode)
-print(SimpleStorage)
+
 
 #get the latest transaction
 
@@ -61,7 +61,7 @@ transaction = SimpleStorage.constructor().buildTransaction( {
 })
 
 
-print(transaction)
+
 
 # 2. Sign a Transaction
 signed_txn = w3.eth.account.sign_transaction(transaction,private_key)
@@ -71,4 +71,27 @@ signed_txn = w3.eth.account.sign_transaction(transaction,private_key)
 tx_hash=w3.eth.sendRawTransaction(signed_txn.rawTransaction)
 
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+# Working with the contract 
+# needs to address of deployed contract
+# need to get the contract abi
+
+# get the contract address
+
+simpe_storage = w3.eth.contract(address=tx_receipt.contractAddress,abi=abi)
+
+# there are two ways to interact with the contract
+# 1. call() :-> It will not make a state change but it will return the value
+# 2. transact() :-> It will make a state change 
+#    And it will return the value and also change the state e.g. set value of x
+
+
+# calling retrieve() using call
+value = simpe_storage.functions.retrieve().call()
+print(value)
+
+
+
+
+# get the contract instance
 

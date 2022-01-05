@@ -9,7 +9,7 @@ contract SmipleStorage{
         favouriteNumber = _favNumber;
     }
 
-    function reterive () public view returns(uint256){
+    function retrieve () public view returns(uint256){
         return favouriteNumber;
     }
     struct People{
