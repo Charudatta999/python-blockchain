@@ -48,11 +48,11 @@ SimpleStorage = w3.eth.contract(abi=abi,bytecode=bytecode)
 #get the latest transaction
 
 nonce = w3.eth.getTransactionCount(my_address)
-print(nonce)
+print('current nonce',nonce)
 
 # 1. Build a Transaction
 
-
+print("deploying . . . . .")
 transaction = SimpleStorage.constructor().buildTransaction( {
     "gasPrice": w3.eth.gas_price, 
     "chainId": chain_id, 
@@ -61,15 +61,15 @@ transaction = SimpleStorage.constructor().buildTransaction( {
 })
 
 
-
+print("signing transaction . . . . . .")
 
 # 2. Sign a Transaction
 signed_txn = w3.eth.account.sign_transaction(transaction,private_key)
 
-
+print("signed !*!")
 # 3. Send a Transaction to deploy
 tx_hash=w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
+print("deployed !*!") 
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
 # Working with the contract 
@@ -88,10 +88,10 @@ simpe_storage = w3.eth.contract(address=tx_receipt.contractAddress,abi=abi)
 
 # calling retrieve() using call
 value = simpe_storage.functions.retrieve().call()
-print(value)
+print("vlaue before updatation",value)
 
 # using  transact() and initialising value of favourite number
-
+print(" updating value of favourite number . . . . . .")
 # 1. create a transaction
 store_transaction = simpe_storage.functions.store(10).buildTransaction({
     "chainId":chain_id,
@@ -100,17 +100,28 @@ store_transaction = simpe_storage.functions.store(10).buildTransaction({
 })
 
 # 2. sign the transaction
+
+print("signing transaction . . . . . .")
+
 sign_store_txn = w3.eth.account.sign_transaction(store_transaction,private_key)
 
-# 3.Get the transaction hash
+print("signed !*!")
+
+# 3.Get the transaction hash or send the transaction
+
+print("making state change . . . . . .")
+
 store_txn_hash = w3.eth.sendRawTransaction(sign_store_txn.rawTransaction)
+
+print("state changed made !*!")
 
 # 4.getting txn receipt after getting mined
 store_txn_receipt = w3.eth.waitForTransactionReceipt(store_txn_hash)
 
 # 5. get the value changed by store function
 value = simpe_storage.functions.retrieve().call()
-print(value)
+
+print('value after state change',value)
 
 
 # get the contract instance
