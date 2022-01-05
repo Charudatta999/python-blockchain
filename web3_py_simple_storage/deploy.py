@@ -32,10 +32,10 @@ bytecode = compiled_sol["contracts"]["SmipleStorage.sol"]["SmipleStorage"]["evm"
 abi=compiled_sol["contracts"]["SmipleStorage.sol"]["SmipleStorage"]["abi"]
 
 # requiremnts for conecting to chain
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
+w3 = Web3(Web3.HTTPProvider("http://172.23.240.1:7545"))
 chain_id =1337
-my_address ="0xEB20Bbd4F066404Fb68b732D88269B43d5F2f94B"
-private_key ="0x310dfd88cd38333e926b8e04b7b490c858476e3749a9a38ceb497c8fbe655342"
+my_address ="0x699e53bBd3B7e870432940CF856F8F54AB814E11"
+private_key ="0x78e074130ac8f79edbeff554dc378ecebad7120faabfebeac73b339824032888"
 
 #create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi,bytecode=bytecode)
@@ -46,3 +46,18 @@ print(SimpleStorage)
 nonce = w3.eth.getTransactionCount(my_address)
 print(nonce)
 
+# 1. Build a Transaction
+# 2. Sign a Transaction
+# 3. Send a Transaction
+
+transaction = SimpleStorage.constructor().buildTransaction( {
+    "gasPrice": w3.eth.gas_price, 
+    "chainId": chain_id, 
+    "from": my_address, 
+    "nonce": nonce, 
+})
+
+# transaction = SimpleStorage.constructor().buildTransaction(
+#     {"chainId":chain_id,"from":my_address,"nonce":nonce}
+#     )
+print(transaction)
