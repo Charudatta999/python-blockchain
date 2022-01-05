@@ -90,7 +90,27 @@ simpe_storage = w3.eth.contract(address=tx_receipt.contractAddress,abi=abi)
 value = simpe_storage.functions.retrieve().call()
 print(value)
 
+# using  transact() and initialising value of favourite number
 
+# 1. create a transaction
+store_transaction = simpe_storage.functions.store(10).buildTransaction({
+    "chainId":chain_id,
+    "gasPrice":w3.eth.gas_price,
+    "nonce":nonce+1,# a nonce can be used only once for a transaction
+})
+
+# 2. sign the transaction
+sign_store_txn = w3.eth.account.sign_transaction(store_transaction,private_key)
+
+# 3.Get the transaction hash
+store_txn_hash = w3.eth.sendRawTransaction(sign_store_txn.rawTransaction)
+
+# 4.getting txn receipt after getting mined
+store_txn_receipt = w3.eth.waitForTransactionReceipt(store_txn_hash)
+
+# 5. get the value changed by store function
+value = simpe_storage.functions.retrieve().call()
+print(value)
 
 
 # get the contract instance
